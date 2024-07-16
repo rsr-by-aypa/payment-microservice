@@ -97,6 +97,7 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+					<mainClass>com.rsr.payment_microservice.PaymentMicroserviceApplication</mainClass>
 				</configuration>
 			</plugin>
 		</plugins>
