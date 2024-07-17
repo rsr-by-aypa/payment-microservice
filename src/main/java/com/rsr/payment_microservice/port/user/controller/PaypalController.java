@@ -29,7 +29,7 @@ public class PaypalController {
     private PaypalService paypalService;
 
     @PostMapping("/create/{userId}")
-    public RedirectView createPayment(@RequestParam("cancelUrl") String cancelUrl,
+    public String createPayment(@RequestParam("cancelUrl") String cancelUrl,
                                       @RequestParam("successUrl") String successUrl,
                                       @PathVariable("userId") UUID userId) throws NoSuchPaymentException, PayPalRESTException, PaymentException {
 
@@ -41,7 +41,7 @@ public class PaypalController {
                 "sale", "Your Order - 12", cancelUrl, successUrl);
         for (Links links: payment.getLinks()) {
             if (links.getRel().equals("approval_url")) {
-                return new RedirectView(links.getHref());
+                return links.getHref();
             }
         }
         throw new PaymentException();
