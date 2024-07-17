@@ -66,8 +66,8 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          platforms: linux/amd64,linux/arm64
-          tags: ghcr.io/rsr-by-aypa/payment-microservice:latest
+          platforms: linux/amd64, linux/arm64
+          tags: ghcr.io/rsr-by-aypa/rsr-payment-microservice:latest
 
       - name: Logout from GitHub Container Registry
         run: docker logout ghcr.io
