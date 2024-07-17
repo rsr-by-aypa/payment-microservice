@@ -29,18 +29,17 @@ public class PaypalController {
 
     private final PaypalService paypalService;
 
-    @PostMapping("/create")
+    @PostMapping("/create/{userId}")
     public RedirectView createPayment(@RequestParam("cancelUrl") String cancelUrl,
                                       @RequestParam("successUrl") String successUrl,
-                                      @RequestParam("paymentId") UUID paymentId,
-                                      @RequestParam("userId") UUID userId) throws NoSuchPaymentException, PayPalRESTException, PaymentException {
+                                      @PathVariable("userId") UUID userId) throws NoSuchPaymentException, PayPalRESTException, PaymentException {
 
-        RSRPayment rsrPayment = paymentService.getPaymentByIdAndUserId(paymentId, userId);
-        double totalAmount = rsrPayment.getAmountInEuro();
-        UUID orderId = rsrPayment.getOrderId();
+        //RSRPayment rsrPayment = paymentService.getPaymentByIdAndUserId(paymentId, userId);
+        //double totalAmount = rsrPayment.getAmountInEuro();
+        //UUID orderId = rsrPayment.getOrderId();
 
-        Payment payment = paypalService.createPayment(totalAmount, "EUR", "paypal",
-                "sale", "Your Order - " + orderId, cancelUrl, successUrl);
+        Payment payment = paypalService.createPayment(10.0, "EUR", "paypal",
+                "sale", "Your Order - 12", cancelUrl, successUrl);
         for (Links links: payment.getLinks()) {
             if (links.getRel().equals("approval_url")) {
                 return new RedirectView(links.getHref());
@@ -64,4 +63,5 @@ public class PaypalController {
         }
         return "paymentSuccess";
     }
+
 }
