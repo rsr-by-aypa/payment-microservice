@@ -41,6 +41,7 @@ class PaymentMicroserviceApplicationTests {
 
 		registry.add("spring.rabbitmq.host", rabbitMQContainer::getHost);
 		registry.add("spring.rabbitmq.port", rabbitMQContainer::getAmqpPort);
+
 	}
 
 	@Test
