@@ -38,6 +38,7 @@ jobs:
         run: |
           echo "paypal.client-id=${{ secrets.PAYPAL_CLIENT_ID }}" >> src/main/resources/application.properties
           echo "paypal.client-secret=${{ secrets.PAYPAL_CLIENT_SECRET }}" >> src/main/resources/application.properties
+          cat src/main/resources/application.properties
 
       - name: Run tests
         run: mvn -B test
