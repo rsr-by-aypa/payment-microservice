@@ -40,6 +40,9 @@ jobs:
       - name: Install dependencies and run tests
         run: mvn install -DskipTests
 
+      - name: Show Properties
+        run: cat src/main/resources/application.properties
+
       - name: Run tests
         run: mvn -B test
 
