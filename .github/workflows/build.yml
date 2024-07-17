@@ -36,8 +36,10 @@ jobs:
 
       - name: Add GitHub Secret to application.properties
         run: |
-          echo "paypal.client-id=${{ secrets.PAYPAL_CLIENT_ID }}" >> src/main/resources/application.properties
-          echo "paypal.client-secret=${{ secrets.PAYPAL_CLIENT_SECRET }}" >> src/main/resources/application.properties
+          echo "paypal.client-id=${{ secrets.PAYPAL_CLIENT_ID }}" > src/main/resources/application.properties.temp
+          echo "paypal.client-secret=${{ secrets.PAYPAL_CLIENT_SECRET }}" >> src/main/resources/application.properties.temp
+          cat src/main/resources/application.properties.temp > src/main/resources/application.properties
+          rm src/main/resources/application.properties.temp
 
       - name: Run tests
         run: mvn -B test
