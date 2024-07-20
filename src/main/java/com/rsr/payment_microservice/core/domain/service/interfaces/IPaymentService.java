@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public interface IPaymentService {
 
-    UUID createPayment(RSRPayment payment);
+    void createPayment(RSRPayment payment);
 
-    RSRPayment getPaymentByIdAndUserId(UUID paymentId, UUID userId) throws NoSuchPaymentException;
+    RSRPayment getPaymentByOrderIdAndUserId(UUID orderId, UUID userId) throws NoSuchPaymentException;
 }
