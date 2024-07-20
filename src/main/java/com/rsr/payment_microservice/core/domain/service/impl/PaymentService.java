@@ -19,15 +19,14 @@ public class PaymentService implements IPaymentService {
     private final IPaymentRepository paymentRepository;
 
     @Override
-    public UUID createPayment(RSRPayment payment) {
-        RSRPayment createdPayment = paymentRepository.save(payment);
-        return createdPayment.getPaymentId();
+    public void createPayment(RSRPayment payment) {
+        paymentRepository.save(payment);
     }
 
     @Override
-    public RSRPayment getPaymentByIdAndUserId(UUID paymentId, UUID userId) throws NoSuchPaymentException {
-        RSRPayment payment = paymentRepository.findById(paymentId).orElseThrow(NoSuchPaymentException::new);
-        if (!Objects.equals(payment.getUserId().toString(), userId.toString())) {
+    public RSRPayment getPaymentByOrderIdAndUserId(UUID orderId, UUID userId) throws NoSuchPaymentException {
+        RSRPayment payment = paymentRepository.findByOrderId(orderId);
+        if (payment == null || !Objects.equals(payment.getUserId().toString(), userId.toString())) {
             throw new NoSuchPaymentException();
         }
         return payment;

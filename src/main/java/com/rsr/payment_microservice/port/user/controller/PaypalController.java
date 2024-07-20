@@ -8,12 +8,9 @@ import com.rsr.payment_microservice.core.domain.service.impl.PaypalService;
 import com.rsr.payment_microservice.core.domain.service.interfaces.IPaymentService;
 import com.rsr.payment_microservice.port.utils.exceptions.NoSuchPaymentException;
 import com.rsr.payment_microservice.port.utils.exceptions.PaymentException;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.UUID;
 
@@ -30,16 +27,17 @@ public class PaypalController {
 
     @PostMapping("/create/{userId}")
     public String createPayment(@RequestParam("cancelUrl") String cancelUrl,
-                                      @RequestParam("successUrl") String successUrl,
-                                      @PathVariable("userId") UUID userId) throws NoSuchPaymentException, PayPalRESTException, PaymentException {
+                                @RequestParam("successUrl") String successUrl,
+                                @PathVariable("userId") UUID userId,
+                                @RequestParam("orderId") UUID orderId) throws NoSuchPaymentException, PayPalRESTException, PaymentException {
 
-        //RSRPayment rsrPayment = paymentService.getPaymentByIdAndUserId(paymentId, userId);
+        //Should work in the future:
+        //RSRPayment rsrPayment = paymentService.getPaymentByOrderIdAndUserId(orderId, userId);
         //double totalAmount = rsrPayment.getAmountInEuro();
-        //UUID orderId = rsrPayment.getOrderId();
 
         Payment payment = paypalService.createPayment(10.0, "EUR", "paypal",
                 "sale", "Your Order - 12", cancelUrl, successUrl);
-        for (Links links: payment.getLinks()) {
+        for (Links links : payment.getLinks()) {
             if (links.getRel().equals("approval_url")) {
                 return links.getHref();
             }
@@ -48,13 +46,12 @@ public class PaypalController {
     }
 
     @GetMapping("/execute")
-    public String executePayment(@RequestParam("cancelUrl") String cancelUrl,
-                                 @RequestParam("successUrl") String successUrl,
-                                 @RequestParam("paymentId") String paymentId,
+    public String executePayment(@RequestParam("paymentId") String paymentId,
                                  @RequestParam("payerId") String payerId) {
         try {
             Payment payment = paypalService.executePayment(paymentId, payerId);
             if (payment.getState().equals("approved")) {
+
                 return "paymentSuccess";
             }
         } catch (PayPalRESTException e) {
