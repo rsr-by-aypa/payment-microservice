@@ -31,8 +31,9 @@ public class PaypalController {
                                 @PathVariable("userId") UUID userId,
                                 @RequestParam("orderId") UUID orderId) throws NoSuchPaymentException, PayPalRESTException, PaymentException {
 
-        RSRPayment rsrPayment = paymentService.getPaymentByOrderIdAndUserId(orderId, userId);
-        double totalAmount = rsrPayment.getAmountInEuro();
+        //Should work in the future:
+        //RSRPayment rsrPayment = paymentService.getPaymentByOrderIdAndUserId(orderId, userId);
+        //double totalAmount = rsrPayment.getAmountInEuro();
 
         Payment payment = paypalService.createPayment(10.0, "EUR", "paypal",
                 "sale", "Your Order - 12", cancelUrl, successUrl);
